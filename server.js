@@ -1,6 +1,13 @@
 var express = require('express');
+var bodyParser = require('body-parser');
+var mongoClient = require('mongodb').MongoClient;
+var objectID = require('mongodb').ObjectID
 
 var app = express();
+var db;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 var projects = [
   {
@@ -26,17 +33,67 @@ var projects = [
 ];
 
 app.get('/projects', function (req, res) {
-  res.send(projects);
+  db.collection('projects').find().toArray(function (err, docs) {
+    if (err) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
+
+    res.send(docs)
+  })
 })
 
 app.get('/projects/:id', function (req, res) {
-  console.log(req.params);
+  db.collection('projects').findOne({ _id: objectID(req.params.id) }, function (err, doc) {
+    if (err) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
+    res.send(doc)
+  })
+})
+
+app.post('/projects', function (req, res) {
+
+  var project = {
+    name: req.body.name
+  };
+
+  try{
+    db.collection('projects').insertOne(project);
+    res.send(project);
+  } catch(err){
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
+app.put('/projects/:id', function (req, res) {
   var project = projects.find(function (project) {
     return project.id === Number(req.params.id);
   });
-  res.send(project);
+  project.name = req.body.name
+  res.sendStatus(200);
 })
 
-app.listen(3012, function () {
-  console.log('API app started');
+app.delete('/projects/:id', function (req, res) {
+  projects = projects.filter(function (project) {
+    return project.id !== Number(req.params.id);
+  });
+  res.sendStatus(200);
 })
+
+mongoClient.connect('mongodb://localhost:27017', {
+     useUnifiedTopology: true,
+     useNewUrlParser: true
+  }, function (error, database) {
+  if (error) {
+    return console.log(err);
+  }
+  //db = database;
+  db = database.db('metallic_shader');
+
+  app.listen(3012, function () {
+    console.log('API app started');
+  })
+});
