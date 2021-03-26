@@ -33,6 +33,7 @@ var projects = [
 ];
 
 app.get('/projects', function (req, res) {
+  console.log('get');
   db.collection('projects').find().toArray(function (err, docs) {
     if (err) {
       console.log(err);
@@ -44,6 +45,7 @@ app.get('/projects', function (req, res) {
 })
 
 app.get('/projects/:id', function (req, res) {
+  console.log('get');
   db.collection('projects').findOne({ _id: objectID(req.params.id) }, function (err, doc) {
     if (err) {
       console.log(err);
@@ -54,14 +56,10 @@ app.get('/projects/:id', function (req, res) {
 })
 
 app.post('/projects', function (req, res) {
-
-  var project = {
-    name: req.body.name
-  };
-
+  console.log('post');
   try{
-    db.collection('projects').insertOne(project);
-    res.send(project);
+    db.collection('projects').insertMany(req.body);
+    res.sendStatus(200);
   } catch(err){
     console.log(err);
     res.sendStatus(500);
@@ -94,6 +92,6 @@ mongoClient.connect('mongodb://localhost:27017', {
   db = database.db('metallic_shader');
 
   app.listen(3012, function () {
-    console.log('API app started');
+    console.log('API did started');
   })
 });
