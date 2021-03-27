@@ -56,7 +56,6 @@ app.get('/projects/:id', function (req, res) {
 })
 
 app.post('/projects', function (req, res) {
-  console.log('post');
   try{
     db.collection('projects').insertMany(req.body);
     res.sendStatus(200);
@@ -74,11 +73,17 @@ app.put('/projects/:id', function (req, res) {
   res.sendStatus(200);
 })
 
-app.delete('/projects/:id', function (req, res) {
-  projects = projects.filter(function (project) {
-    return project.id !== Number(req.params.id);
-  });
-  res.sendStatus(200);
+app.delete('/projects', function (req, res) {
+  console.log(req.body);
+  try {
+    var query = { _id: { $in: req.body } };
+    db.collection("projects").deleteMany(query);
+    res.sendStatus(200);
+  } catch(err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+
 })
 
 mongoClient.connect('mongodb://localhost:27017', {
@@ -88,7 +93,7 @@ mongoClient.connect('mongodb://localhost:27017', {
   if (error) {
     return console.log(err);
   }
-  //db = database;
+
   db = database.db('metallic_shader');
 
   app.listen(3012, function () {
