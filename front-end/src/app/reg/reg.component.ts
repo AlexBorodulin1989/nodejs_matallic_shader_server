@@ -15,7 +15,7 @@ export class RegComponent implements OnInit {
   email: String = "";
   password: String = "";
 
-  constructor(private chechForm: CheckFormService,
+  constructor(private checkForm: CheckFormService,
     private flashMessages: FlashMessagesService,
     private router: Router,
     private authService: AuthService
@@ -31,21 +31,21 @@ export class RegComponent implements OnInit {
       password: this.password
     };
 
-    if(!this.chechForm.checkUsername(user.username)) {
+    if(!this.checkForm.checkUsername(user.username)) {
       this.flashMessages.show("Name of user undefined", {
         cssClass: 'alert-danger',
         timeout: 5000
       })
       console.log("Name of user undefined");
       return false
-    } else if(!this.chechForm.checkEmail(user.email)) {
+    } else if(!this.checkForm.checkEmail(user.email)) {
       this.flashMessages.show("Email undefined", {
         cssClass: 'alert-danger',
         timeout: 5000
       })
       console.log("Email undefined");
       return false
-    } else if(!this.chechForm.checkPassword(user.password)) {
+    } else if(!this.checkForm.checkPassword(user.password)) {
       this.flashMessages.show("Password undefined", {
         cssClass: 'alert-danger',
         timeout: 5000

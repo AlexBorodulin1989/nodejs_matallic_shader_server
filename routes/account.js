@@ -4,10 +4,6 @@ const User = require('../models/user');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/db');
-/*
-router.get('/reg', (req, res) => {
-  res.send('Registration');
-})*/
 
 router.post('/reg', (req, res) => {
   let newUser = new User({
@@ -29,7 +25,10 @@ router.post('/auth', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
+  console.log(req.body);
+
   User.getUserByUsername(username, (err, user) => {
+    console.log(user);
     if (err) throw err;
     if (!user) {
       return res.json({success: false, msg: "Username or password not correct"});
@@ -37,7 +36,7 @@ router.post('/auth', (req, res) => {
     User.comparePass(password, user.password, (err, isMatch) => {
       if (err) throw err;
       if (isMatch) {
-        const token = jwt.sign(user, config.secret, {
+        const token = jwt.sign(user.toJSON(), config.secret, {
           expiresIn: 3600 * 24
         });
         res.json({

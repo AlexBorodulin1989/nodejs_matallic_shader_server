@@ -19,8 +19,8 @@ const UserScheme = mongoose.Schema({
 
 const User = module.exports = mongoose.model('User', UserScheme);
 
-module.exports.getUserByUsername = function(login, callback) {
-  const query = {login: login};
+module.exports.getUserByUsername = function(username, callback) {
+  const query = {username: username};
   User.findOne(query, callback);
 };
 
