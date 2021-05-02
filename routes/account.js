@@ -11,7 +11,7 @@ router.get('/reg', (req, res) => {
 
 router.post('/reg', (req, res) => {
   let newUser = new User({
-    username: req.body.name,
+    username: req.body.username,
     email: req.body.email,
     password: req.body.password,
   });
@@ -20,7 +20,7 @@ router.post('/reg', (req, res) => {
     if (err) {
       res.json({success: false, msg: "User not added"});
     } else {
-      res.json({success: false, msg: "User added"});
+      res.json({success: true, msg: "User added"});
     }
   });
 });
