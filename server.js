@@ -1,36 +1,45 @@
 var express = require('express');
+const cors = require('cors');
 var bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const path = require('path');
 var mongoClient = require('mongodb').MongoClient;
 var objectID = require('mongodb').ObjectID
+const config = require('./config/db');
+const account = require('./routes/account')
 
 var app = express();
 var db;
 
+const port = 3000;
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./config/passport')(passport);
+
+app.use(cors());
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+mongoose.connect(config.db, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connection.on('connected', () => {
+  console.log("Successfully connected to db");
+})
+
+mongoose.connection.on('error', (err) => {
+  console.log("Not connected to db: " + error);
+})
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var projects = [
-  {
-    id: 1,
-    name: 'project1'
-  },
-  {
-    id: 2,
-    name: 'project2'
-  },
-  {
-    id: 3,
-    name: 'project3'
-  },
-  {
-    id: 4,
-    name: 'project4'
-  },
-  {
-    id: 5,
-    name: 'project5'
-  }
-];
+app.get('/', (req, res) => {
+  res.send('Main!');
+})
+
+app.use('/account', account);
 
 app.get('/projects', function (req, res) {
   console.log('get');
@@ -85,7 +94,7 @@ app.delete('/projects', function (req, res) {
   }
 
 })
-
+/*
 mongoClient.connect('mongodb://localhost:27017', {
      useUnifiedTopology: true,
      useNewUrlParser: true
@@ -96,7 +105,11 @@ mongoClient.connect('mongodb://localhost:27017', {
 
   db = database.db('metallic_shader');
 
-  app.listen(3012, function () {
+  app.listen(port, () => {
     console.log('API did started');
   })
-});
+});*/
+
+app.listen(port, () => {
+  console.log('API did started');
+})

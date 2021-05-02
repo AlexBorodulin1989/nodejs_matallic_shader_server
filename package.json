@@ -2,9 +2,10 @@
   "name": "metallicserver",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server"
   },
   "repository": {
     "type": "git",
@@ -17,9 +18,15 @@
   },
   "homepage": "https://github.com/AlexBorodulin1989/nodejs_matallic_shader_server#readme",
   "dependencies": {
+    "bcryptjs": "*",
     "body-parser": "^1.19.0",
+    "cors": "*",
     "express": "^4.17.1",
+    "jsonwebtoken": "*",
     "mongodb": "^3.6.5",
-    "passport": "^0.4.1"
+    "mongoose": "*",
+    "npm": "^6.11.3",
+    "passport": "*",
+    "passport-jwt": "*"
   }
 }
