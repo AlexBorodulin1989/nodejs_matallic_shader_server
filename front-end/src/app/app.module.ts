@@ -15,6 +15,8 @@ import { FooterComponent } from './footer/footer.component';
 import { FormsModule } from '@angular/forms';
 import { CheckFormService } from './check-form.service';
 
+import { FlashMessagesModule } from 'angular2-flash-messages';
+
 const appRoute: Routes = [
   {path: '', component: HomeComponent},
   {path: 'reg', component: RegComponent},

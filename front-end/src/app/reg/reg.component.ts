@@ -35,5 +35,6 @@ export class RegComponent implements OnInit {
       return false
     }
     console.log("Success");
+    return true
   }
 }
