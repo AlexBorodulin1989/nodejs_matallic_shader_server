@@ -38,7 +38,8 @@ const appRoute: Routes = [
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot(appRoute),
-    FormsModule
+    FormsModule,
+    FlashMessagesModule.forRoot()
   ],
   providers: [CheckFormService],
   bootstrap: [AppComponent]
