@@ -28,7 +28,6 @@ router.post('/auth', (req, res) => {
   console.log(req.body);
 
   User.getUserByUsername(username, (err, user) => {
-    console.log(user);
     if (err) throw err;
     if (!user) {
       return res.json({success: false, msg: "Username or password not correct"});
@@ -39,6 +38,8 @@ router.post('/auth', (req, res) => {
         const token = jwt.sign(user.toJSON(), config.secret, {
           expiresIn: 3600 * 24
         });
+        var decoded = jwt.verify(token, config.secret);
+        console.log(decoded)
         res.json({
           success: true,
           token: 'JWT ' + token,
